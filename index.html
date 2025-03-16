@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --accent-color: #20c997;
+            --dark-color: #212529;
+            --light-color: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+            position: relative;
+        }
+        
+        /* Navbar styling */
+        .navbar {
+            transition: all 0.4s;
+        }
+        
+        .navbar-scrolled {
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            background-color: #fff !important;
+        }
+        
+        /* Hero section */
+        #hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/api/placeholder/1920/1080') center/cover no-repeat;
+            color: white;
+        }
+        
+        .hero-text {
+            animation: fadeIn 2s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Section styling */
+        section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 60px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        /* About section */
+        .about-img {
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Skills section */
+        .skill-item {
+            margin-bottom: 30px;
+        }
+        
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+        }
+        
+        /* Portfolio section */
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(33, 37, 41, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+        
+        /* Contact section */
+        .contact-info {
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            background-color: white;
+            transition: transform 0.3s;
+        }
+        
+        .contact-info:hover {
+            transform: translateY(-5px);
+        }
+        
+        .contact-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+        
+        /* Custom form styling */
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
+        }
+        
+        .btn-custom {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+            padding: 10px 30px;
+            transition: all 0.3s;
+        }
+        
+        .btn-custom:hover {
+            background-color: #17a87b;
+            border-color: #17a87b;
+            color: white;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 40px 0;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 20px;
+            transition: color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: var(--accent-color);
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+        
+        .animate-on-scroll.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-offset="100">
+    <!-- Navigation -->
+    <nav id="mainNav" class="navbar navbar-expand-lg navbar-light bg-transparent fixed-top py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#hero">My Portfolio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#hero">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#skills">Skills</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#portfolio">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container text-center">
+            <div class="hero-text">
+                <h1 class="display-3 fw-bold">Hello, I'm <span class="text-info">Ritu Gandhi</span></h1>
+                <h2 class="mb-4">Frontend Web Developer</h2>
+                <p class="lead mb-5">Creating beautiful and functional websites is my passion</p>
+                <a href="#portfolio" class="btn btn-custom btn-lg me-3">View My Work</a>
+                <a href="#contact" class="btn btn-outline-light btn-lg">Contact Me</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 animate-on-scroll">
+                    <h2 class="section-title">About Me</h2>
+                    <p class="lead">I'm a passionate web developer. I'm creating responsive and user-friendly websites.</p>
+                    <p>I am passionate web developer with a strong background in HTML,CSS, JavaScript, and Bootstrap. <br>
+                       I have experience in building responsive and user-friendly websites using modern technologies. <br>
+                       I have develop, manage, and monitor IoT devices and systems by combining three core components: data, technology, and research.</p>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <p><strong>Name:</strong> Ritu Gandhi</p>
+                            <p><strong>Email:</strong>gandhivaishali954@gmail.com</p>
+                            <p><strong>Age:</strong> 22</p>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-custom mt-3">Download CV</a>
+                </div>
+                <div class="col-lg-6 d-flex align-items-center justify-content-center animate-on-scroll" data-delay="200">
+                    <img src="images/ritu.jpg" alt="Profile" class="about-img img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <h2 class="section-title">My Skills</h2>
+            <div class="row">
+                <div class="col-md-6 animate-on-scroll">
+                    <div class="skill-item">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-bold">HTML/CSS</span>
+                            <span>95%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-bold">JavaScript</span>
+                            <span>75%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-bold">Bootstrap</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 animate-on-scroll" data-delay="200">
+                    <div class="skill-item">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-bold">PHP</span>
+                            <span>60%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-bold">MySQL</span>
+                            <span>50%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-bold">UI Design</span>
+                            <span>80%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-secondary" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="bg-light">
+        <div class="container">
+            <h2 class="section-title">My Portfolio</h2>
+            <div class="row">
+                <!-- Portfolio Item 1 -->
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="portfolio-item">
+                        <img src="images/portfolio.png" alt="Project 1" class="img-fluid">
+                        <div class="portfolio-overlay">
+                            <h5 class="text-white">Portfolio Website</h5>
+                            <p class="text-white-50">HTML, CSS, Bootstrap,JavaScript</p>
+                            <a href="#" class="btn btn-custom btn-sm mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Portfolio Item 2 -->
+                <div class="col-md-4 animate-on-scroll" data-delay="200">
+                    <div class="portfolio-item">
+                        <img src="images/todo.png" alt="Project 2" class="img-fluid">
+                        <div class="portfolio-overlay">
+                            <h5 class="text-white">To-do List Website</h5>
+                            <p class="text-white-50">HTML, CSS, Bootstrap,JavaScript</p>
+                            <a href="#" class="btn btn-custom btn-sm mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Portfolio Item 3 -->
+                <div class="col-md-4 animate-on-scroll" data-delay="400">
+                    <div class="portfolio-item">
+                        <img src="images/calculator.png" alt="Project 3" class="img-fluid">
+                        <div class="portfolio-overlay">
+                            <h5 class="text-white">Calculator</h5>
+                            <p class="text-white-50">HTML, CSS, Bootstrap, JavaScript</p>
+                            <a href="#" class="btn btn-custom btn-sm mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Portfolio Item 4 -->
+                <div class="col-md-4 animate-on-scroll">
+                    <div class="portfolio-item">
+                        <img src="images/e-commerce.png" alt="Project 4" class="img-fluid">
+                        <div class="portfolio-overlay">
+                            <h5 class="text-white">E-commerce Website</h5>
+                            <p class="text-white-50">HTML, CSS, JavaScript, PHP, MySQL</p>
+                            <a href="#" class="btn btn-custom btn-sm mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Portfolio Item 5 -->
+                <div class="col-md-4 animate-on-scroll" data-delay="200">
+                    <div class="portfolio-item">
+                        <img src="images/converter.png" alt="Project 5" class="img-fluid">
+                        <div class="portfolio-overlay">
+                            <h5 class="text-white">Tempreature Convert</h5>
+                            <p class="text-white-50">HTML, CSS, JavaScript</p>
+                            <a href="#" class="btn btn-custom btn-sm mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Portfolio Item 6 -->
+                <div class="col-md-4 animate-on-scroll" data-delay="400">
+                    <div class="portfolio-item">
+                        <img src="images/netflix.png" alt="Project 6" class="img-fluid">
+                        <div class="portfolio-overlay">
+                            <h5 class="text-white">Netflix Clone</h5>
+                            <p class="text-white-50">HTML, CSS, JavaScript</p>
+                            <a href="#" class="btn btn-custom btn-sm mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Contact Me</h2>
+            <div class="row">
+                <div class="col-lg-4 animate-on-scroll">
+                    <div class="contact-info mb-4">
+                        <div class="text-center">
+                            <i class="fas fa-map-marker-alt contact-icon"></i>
+                            <h5>Location</h5>
+                            <p class="mb-0">Vadodara, Gujarat, India</p>
+                        </div>
+                    </div>
+                    <div class="contact-info mb-4">
+                        <div class="text-center">
+                            <i class="fas fa-envelope contact-icon"></i>
+                            <h5>Email</h5>
+                            <p class="mb-0">gandhivaishali954@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-info">
+                        <div class="text-center">
+                            <i class="fas fa-phone contact-icon"></i>
+                            <h5>Phone</h5>
+                            <p class="mb-0">+91 9328098342</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 animate-on-scroll" data-delay="200">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <input type="text" class="form-control" placeholder="Your Name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <input type="email" class="form-control" placeholder="Your Email" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" placeholder="Subject" required>
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-custom">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <div class="social-icons mb-4">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p>© 2025 My Portfolio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Back to top button -->
+    <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+
+    <!-- Bootstrap & jQuery JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        $(document).ready(function() {
+            // Navbar scroll effect
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 50) {
+                    $('#mainNav').addClass('navbar-scrolled');
+                } else {
+                    $('#mainNav').removeClass('navbar-scrolled');
+                }
+                
+                // Back to top button visibility
+                if ($(this).scrollTop() > 300) {
+                    $('#backToTop').addClass('active');
+                } else {
+                    $('#backToTop').removeClass('active');
+                }
+                
+                // Animate on scroll
+                $('.animate-on-scroll').each(function() {
+                    var position = $(this).offset().top;
+                    var scroll = $(window).scrollTop();
+                    var windowHeight = $(window).height();
+                    var delay = $(this).data('delay') || 0;
+                    
+                    if (scroll + windowHeight - 100 > position) {
+                        setTimeout(() => {
+                            $(this).addClass('show');
+                        }, delay);
+                    }
+                });
+            });
+            
+            // Smooth scrolling for navbar links
+            $('a.nav-link, a.navbar-brand, a.btn, a.back-to-top').click(function(e) {
+                if (this.hash !== '') {
+                    e.preventDefault();
+                    const hash = this.hash;
+                    
+                    $('html, body').animate({
+                        scrollTop: $(hash).offset().top - 70
+                    }, 800);
+                }
+            });
+            
+            // Trigger animations for elements in viewport on load
+            setTimeout(() => {
+                $(window).trigger('scroll');
+            }, 100);
+        });
+    </script>
+</body>
+</html>
