@@ -1,6 +1,6 @@
 # My-Portfolio
 
-Welcome to my personal portfolio! 🚀 This website showcases my skills, projects, and experience as a Frontend Web Developer.
+Welcome to my personal portfolio! 🚀 This website showcases my skills, projects, and experience as a Web Developer.
 
 📌 Features
 ✔️ Fully responsive design with Bootstrap 5
